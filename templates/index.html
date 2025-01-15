@@ -5,85 +5,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Calculator</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* Style CSS comme dans l'exemple précédent */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h2,
+        h3 {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            text-align: center;
+        }
+
+        .result.fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes buttonPress {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.95);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 
 <body>
-    <header>
-        <h1>Health Calculator App</h1>
-    </header>
+    <div class="container">
+        <h2>Health Calculator</h2>
 
-    <main>
-        <p>Enter your details below to calculate BMI and BMR:</p>
+        <!-- BMI Calculation -->
+        <h3>Calculate BMI</h3>
+        <div class="input-group">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" name="weight" required>
+        </div>
+        <div class="input-group">
+            <label for="height">Height (m)</label>
+            <input type="number" step="0.01" id="height" name="height" required>
+        </div>
+        <button onclick="calculateBMI()">Calculate BMI</button>
 
-        <!-- Formulaire pour calculer le BMI -->
-        <h2>Calculate BMI</h2>
-        <form id="bmi-form" onsubmit="submitBmiForm(event)">
-            <input type="number" id="height-bmi" placeholder="Height (in meters)" step="0.01" required>
-            <input type="number" id="weight-bmi" placeholder="Weight (in kilograms)" step="0.1" required>
-            <button type="submit">Calculate BMI</button>
-        </form>
-        <p id="bmi-result"></p>
+        <div class="result" id="bmi_result_container">
+            <p>BMI: <span id="bmi_result">0.00</span></p>
+        </div>
 
-        <!-- Formulaire pour calculer le BMR -->
-        <h2>Calculate BMR</h2>
-        <form id="bmr-form" onsubmit="submitBmrForm(event)">
-            <input type="number" id="height-bmr" placeholder="Height (in meters)" step="0.01" required>
-            <input type="number" id="weight-bmr" placeholder="Weight (in kilograms)" step="0.1" required>
-            <input type="number" id="age" placeholder="Age (in years)" required>
-            <select id="gender" required>
-                <option value="">Select Gender</option>
+        <!-- BMR Calculation -->
+        <h3>Calculate BMR</h3>
+        <div class="input-group">
+            <label for="weight_bmr">Weight (kg)</label>
+            <input type="number" id="weight_bmr" name="weight_bmr" required>
+        </div>
+        <div class="input-group">
+            <label for="height_bmr">Height (cm)</label>
+            <input type="number" id="height_bmr" name="height_bmr" required>
+        </div>
+        <div class="input-group">
+            <label for="age">Age (years)</label>
+            <input type="number" id="age" name="age" required>
+        </div>
+        <div class="input-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
-            <button type="submit">Calculate BMR</button>
-        </form>
-        <p id="bmr-result"></p>
-    </main>
+        </div>
+        <button onclick="calculateBMR()">Calculate BMR</button>
 
-    <footer>
-        <p>&copy; 2025 Health Calculator. All rights reserved.</p>
-    </footer>
+        <div class="result" id="bmr_result_container">
+            <p>BMR: <span id="bmr_result">0.00</span> kcal/day</p>
+        </div>
+    </div>
 
     <script>
-        async function submitBmiForm(event) {
-            event.preventDefault();
-            const height = document.getElementById('height-bmi').value;
-            const weight = document.getElementById('weight-bmi').value;
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
 
-            const response = await fetch('/calculate_bmi', {
-                method: 'POST',
-                body: new FormData(document.getElementById('bmi-form'))
+            $.post('/bmi', { weight, height }, function (data) {
+                $('#bmi_result').text(data.bmi.toFixed(2));
+                $('#bmi_result_container').addClass('fade-in').fadeIn();
+            }).fail(function () {
+                alert("Error calculating BMI. Please ensure valid inputs.");
             });
-
-            const result = await response.json();
-            if (result.bmi) {
-                document.getElementById('bmi-result').textContent = `Your BMI: ${result.bmi.toFixed(2)}`;
-            } else {
-                document.getElementById('bmi-result').textContent = `Error: ${result.error}`;
-            }
         }
 
-        async function submitBmrForm(event) {
-            event.preventDefault();
-            const height = document.getElementById('height-bmr').value;
-            const weight = document.getElementById('weight-bmr').value;
-            const age = document.getElementById('age').value;
+        function calculateBMR() {
+            const weight = parseFloat(document.getElementById('weight_bmr').value);
+            const height = parseInt(document.getElementById('height_bmr').value);
+            const age = parseInt(document.getElementById('age').value);
             const gender = document.getElementById('gender').value;
 
-            const response = await fetch('/calculate_bmr', {
-                method: 'POST',
-                body: new FormData(document.getElementById('bmr-form'))
+            $.post('/bmr', { weight, height, age, gender }, function (data) {
+                $('#bmr_result').text(data.bmr.toFixed(2));
+                $('#bmr_result_container').addClass('fade-in').fadeIn();
+            }).fail(function () {
+                alert("Error calculating BMR. Please ensure valid inputs.");
             });
-
-            const result = await response.json();
-            if (result.bmr) {
-                document.getElementById('bmr-result').textContent = `Your BMR: ${result.bmr.toFixed(2)} kcal/day`;
-            } else {
-                document.getElementById('bmr-result').textContent = `Error: ${result.error}`;
-            }
         }
     </script>
 </body>
