@@ -12,8 +12,6 @@ help:
 init:
 	@echo "Setting up the virtual environment..."
 	python3 -m venv .venv
-	@echo "Activating the virtual environment..."
-	. .venv/bin/activate
 
 install: init
 	@echo "Installing dependencies..."
