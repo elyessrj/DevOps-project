@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Calculator</title>
+    <!-- Inclusion de la bibliothèque jQuery pour simplifier les requêtes AJAX -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* Styles globaux du corps de la page */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background: linear-gradient(to right, #6a11cb, #2575fc);
+            /* Dégradé de fond */
             color: white;
             display: flex;
             justify-content: center;
@@ -19,21 +22,26 @@
             min-height: 100vh;
         }
 
+        /* Conteneur principal de l'application */
         .container {
             max-width: 500px;
             background: rgba(255, 255, 255, 0.1);
+            /* Fond semi-transparent */
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             animation: fadeIn 1s ease-in-out;
+            /* Animation d'apparition */
         }
 
+        /* Styles des titres */
         h2,
         h3 {
             text-align: center;
             color: #ffffff;
         }
 
+        /* Styles pour les groupes d'entrées */
         .input-group {
             margin-bottom: 15px;
         }
@@ -44,6 +52,7 @@
             font-weight: bold;
         }
 
+        /* Styles des champs de saisie et des boutons */
         input[type="number"],
         select {
             width: 100%;
@@ -60,6 +69,7 @@
             border: none;
             border-radius: 6px;
             background: linear-gradient(to right, #00c6ff, #0072ff);
+            /* Dégradé de fond pour les boutons */
             color: white;
             font-size: 16px;
             font-weight: bold;
@@ -67,11 +77,13 @@
             transition: transform 0.3s ease, background-color 0.3s;
         }
 
+        /* Effet visuel lors du survol du bouton */
         button:hover {
             background-color: #0056b3;
             transform: translateY(-3px);
         }
 
+        /* Styles pour afficher les résultats */
         .result {
             margin-top: 20px;
             font-size: 1.2em;
@@ -82,10 +94,12 @@
             text-align: center;
         }
 
+        /* Animation d'apparition du résultat */
         .result.fade-in {
             animation: fadeIn 0.5s ease forwards;
         }
 
+        /* Animation pour l'apparition du résultat */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -97,20 +111,6 @@
                 transform: translateY(0);
             }
         }
-
-        @keyframes buttonPress {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(0.95);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
     </style>
 </head>
 
@@ -118,7 +118,7 @@
     <div class="container">
         <h2>Health Calculator</h2>
 
-        <!-- BMI Calculation -->
+        <!-- Section de calcul du BMI -->
         <h3>Calculate BMI</h3>
         <div class="input-group">
             <label for="weight">Weight (kg)</label>
@@ -134,7 +134,7 @@
             <p>BMI: <span id="bmi_result">0.00</span></p>
         </div>
 
-        <!-- BMR Calculation -->
+        <!-- Section de calcul du BMR -->
         <h3>Calculate BMR</h3>
         <div class="input-group">
             <label for="weight_bmr">Weight (kg)</label>
@@ -163,18 +163,20 @@
     </div>
 
     <script>
+        // Fonction pour calculer le BMI via une requête AJAX
         function calculateBMI() {
             const weight = parseFloat(document.getElementById('weight').value);
             const height = parseFloat(document.getElementById('height').value);
 
             $.post('/bmi', { weight, height }, function (data) {
-                $('#bmi_result').text(data.bmi.toFixed(2));
-                $('#bmi_result_container').addClass('fade-in').fadeIn();
+                $('#bmi_result').text(data.bmi.toFixed(2)); // Affiche le résultat du BMI
+                $('#bmi_result_container').addClass('fade-in').fadeIn(); // Affiche le conteneur de résultat avec une animation
             }).fail(function () {
                 alert("Error calculating BMI. Please ensure valid inputs.");
             });
         }
 
+        // Fonction pour calculer le BMR via une requête AJAX
         function calculateBMR() {
             const weight = parseFloat(document.getElementById('weight_bmr').value);
             const height = parseInt(document.getElementById('height_bmr').value);
@@ -182,8 +184,8 @@
             const gender = document.getElementById('gender').value;
 
             $.post('/bmr', { weight, height, age, gender }, function (data) {
-                $('#bmr_result').text(data.bmr.toFixed(2));
-                $('#bmr_result_container').addClass('fade-in').fadeIn();
+                $('#bmr_result').text(data.bmr.toFixed(2)); // Affiche le résultat du BMR
+                $('#bmr_result_container').addClass('fade-in').fadeIn(); // Affiche le conteneur de résultat avec une animation
             }).fail(function () {
                 alert("Error calculating BMR. Please ensure valid inputs.");
             });

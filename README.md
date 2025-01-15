@@ -1,88 +1,83 @@
-# Flask App - DevOps Project Template
+Health Calculator Service
+=========================
 
-This repository serves as a template for a simple Flask-based DevOps project. The app provides basic calculator functionalities (addition and subtraction) and includes all necessary files for setting up a local environment, running tests, and deploying to a cloud service with best practices in DevOps.
+Health Calculator Service est une API Flask qui permet de réaliser des calculs de santé comme l'IMC (BMI) et la dépense énergétique totale(BMR).
 
-## Project Structure
+**Fonctionnalités principales :**
 
-The repository is organized as follows:
+*   Calcul de l'IMC (Body Mass Index).
+    
+*   Calcul de la dépense énergétique quotidienne (BMR).
+    
 
-```plaintext
-DEVOPS-PROJECT/
+**Structure du projet :**
+
+Health-calculator-service/
 ├── app.py
-├── utils.py
+├── health_utils.py
 ├── test.py
 ├── requirements.txt
 ├── Makefile
-├── templates/
-│   └── home.html
-├── .env
+├── Dockerfile
 ├── .gitignore
-```
+├──.templates/
+│   └── index.html
+├── .github/
+│   └── workflows/
+│       └── main_python-app-elyess.yml
 
-### File Descriptions
+*   app.py : Fichier principal de l'application Flask.
+    
+*   health_utils.py : Fonctions utilitaires pour les calculs de santé.
+    
+*   test.py : Tests unitaires pour vérifier le bon fonctionnement.
+    
+*   requirements.txt : Liste des dépendances Python.
+    
+*   Dockerfile : Fichier pour créer une image Docker de l'application.
+    
+*   Makefile : Automatisation des tâches courantes (tests, installation).
+    
+*   templates/home.html : Template HTML pour l'interface utilisateur.
+    
+*   .github/workflows/ci.yml : Workflow GitHub Actions pour CI/CD.
+    
 
-- **`app.py`**: The main application file for the Flask app. It sets up routes and connects them to functions in `utils.py` to provide API endpoints for app operations.
+**Prérequis :**
 
-- **`utils.py`**: Contains utility functions for core operations like addition and subtraction. This file is designed to house the main logic for the app’s functionality.
+*   Python 3.x
+    
+*   Flask
+    
+*   Docker (optionnel pour exécuter via un conteneur)
+    
 
-- **`test.py`**: A unit test file that includes tests for the functions defined in `utils.py`. This file ensures that the core functionality behaves as expected.
+**Installation :**
 
-- **`requirements.txt`**: Lists the Python dependencies needed to run the application. This file is used to install the necessary packages in the project environment.
+1.  Cloner le dépôt :git clone https://github.com/elyessrj/health-calculator-service.git
+    
+2.  Aller dans le dossier :cd health-calculator-service
+    
+3.  Créer un environnement virtuel et l'activer :Sous Linux/Mac :python -m venv venv && source venv/bin/activateSous Windows :python -m venv venv && venv\\Scripts\\activate
+    
+4.  Installer les dépendances :pip install -r requirements.txt
+    
 
-- **`Makefile`**: A makefile to streamline project setup and operations. Includes commands for:
-  - `make init`: Install project dependencies.
-  - `make run`: Start the Flask app.
-  - `make test`: Run all unit tests.
+**Utilisation :**
 
-- **`templates/home.html`**: HTML template for the app's user interface. This file provides input fields and buttons for interacting with the calculator operations.
+1.  Lancer le serveur Flask :python app.py
+    
+2.  Accéder à l'application dans un navigateur à l'adresse :http://127.0.0.1:5005/
+    
+3.  Ou bien Accéder à l'application deployer avec Azure dans un navigateur à l'adresse :https://python-app-elyess-gxd8b3gabnh6dne3.francecentral-01.azurewebsites.net/
 
-- **`.env`**: A configuration file for environment variables. It’s used to securely store sensitive information (like API keys, database credentials, or environment-specific settings). **Note**: This file should not be committed to version control for security reasons.
+**Tests unitaires :**Pour exécuter les tests unitaires :python test.py
 
-- **`.gitignore`**: Specifies files and directories that should be ignored by Git. It typically includes files such as `.env` and compiled Python files (`__pycache__`), as well as local environment and dependency caches.
+**Exécution avec Docker :**
 
-## Getting Started
+1.  Construire l'image Docker :docker build -t health-calculator-service .
+    
+2.  Lancer le conteneur :docker run -p 5005:5005 health-calculator-service
+    
 
-1. **Clone the Repository**:
-   ```bash
-   git clone <repository-url>
-   cd DEVOPS-PROJECT
-   ```
-
-2. **Set Up the Environment**:
-   - Create and activate a virtual environment (recommended for managing dependencies).
-   - Install the dependencies:
-     ```bash
-     make init
-     ```
-
-3. **Run the Application**:
-   - Start the Flask app locally:
-     ```bash
-     make run
-     ```
-
-
-4. **Run Tests**:
-   - Execute unit tests to verify functionality:
-     ```bash
-     make test
-     ```
-
-## Additional Configuration
-
-- **Environment Variables**:
-  - Use the `.env` file to store any environment-specific configurations or sensitive information. Be sure to keep this file out of version control by listing it in `.gitignore`.
-
-## Deployment Instructions
-
-For deployment, configure CI/CD pipelines according to your preferred platform (e.g., GitHub Actions, Azure Pipelines). This template can be used with cloud deployment platforms like AWS, Azure, or Heroku for easy scalability.
-  - Use `pipeline.yaml` as a template for a pipeline to build and deploy an application on Azure
-
-## Author
-
-This template was created by **Ali Mokh** and is intended as an educational resource for DevOps projects involving Flask applications.
-
-## License and Usage
-
-This project template is open to use by anyone and may be freely adapted for personal or professional projects. If you use this template as part of teaching materials or educational content, please cite **Ali Mokh** as the original author.
-
+**Intégration Continue :**Ce projet utilise GitHub Actions pour l'intégration continue.Le workflow est défini dans .github/workflows/ci.yml et se déclenche automatiquement lors des push.
